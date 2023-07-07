@@ -86,7 +86,7 @@ public class ItunesDAO {
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
-				result.add(new Track(res.getInt("TrackId"), res.getString("Name"), 
+				result.add(new Track(res.getInt("TrackId"),res.getInt("GenreId") , res.getString("Name"), 
 						res.getString("Composer"), res.getInt("Milliseconds"), 
 						res.getInt("Bytes"),res.getDouble("UnitPrice")));
 			
@@ -130,6 +130,29 @@ public class ItunesDAO {
 
 			while (res.next()) {
 				result.add(new MediaType(res.getInt("MediaTypeId"), res.getString("Name")));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		return result;
+	}
+	
+	public Integer getNPlaylistFromTrack(Integer trackId){
+		final String sql = "select count(distinct p.playlistid) as n "
+				+ "from playlisttrack p, track t "
+				+ "where t.trackid=? and t.trackid=p.trackid ";
+		Integer result = 0;
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, trackId);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				result=res.getInt("n");
 			}
 			conn.close();
 		} catch (SQLException e) {

@@ -5,9 +5,14 @@
 package it.polito.tdp.itunes;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import it.polito.tdp.itunes.model.Model;
+import it.polito.tdp.itunes.model.Track;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,7 +37,7 @@ public class FXMLController {
     private Button btnPlaylist; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbGenere"
-    private ComboBox<?> cmbGenere; // Value injected by FXMLLoader
+    private ComboBox<String> cmbGenere; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtDTOT"
     private TextField txtDTOT; // Value injected by FXMLLoader
@@ -53,6 +58,83 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	String genere = cmbGenere.getValue();
+    	
+//    	controlli sull'input
+    	if (genere==null) {
+    		this.txtResult.setText("Inersire un genere.\n");
+    		return;
+    	}
+    	
+        String min = txtMin.getText() ;
+    	
+    	if(min.equals("")) {
+    		txtResult.setText("Inserire una durata minima.\n");
+    		return ;
+    	}
+    	
+    	double durataMin = 0.0 ;
+
+    	try {
+	    	durataMin = Double.parseDouble(min) ;
+    	} catch(NumberFormatException e) {
+    		txtResult.setText("Inserire un numero come durata minima.\n");
+    		return ;
+    	}
+    	
+    	
+        String max = txtMax.getText() ;
+    	
+    	if(max.equals("")) {
+    		txtResult.setText("Inserire una durata massima.\n");
+    		return ;
+    	}
+    	
+    	double durataMax = 0.0 ;
+
+    	try {
+	    	durataMax = Double.parseDouble(max) ;
+    	} catch(NumberFormatException e) {
+    		txtResult.setText("Inserire un numero come durata massima.\n");
+    		return ;
+    	}
+    	
+    	if(durataMax<=durataMin) {
+    		txtResult.setText("Inserire una durata massima maggiore della durata minima.\n");
+    		return ;
+    	}
+    	
+    	double dmin=durataMin*1000;
+    	double dmax=durataMax*1000;
+    	
+    	
+//    	creazione grafo
+    	this.model.creaGrafo(genere, dmin, dmax);
+    	
+    	
+//    	stampa grafo
+    	this.txtResult.setText("Grafo creato.\n");
+    	this.txtResult.appendText("Ci sono " + this.model.nVertici() + " vertici\n");
+    	this.txtResult.appendText("Ci sono " + this.model.nArchi() + " archi\n\n");
+    
+    	
+        List<Set<Track>> connesse = model.getComponente() ;
+        
+       
+        
+        for(Set<Track> s : connesse) {
+        	 int flag = 0;
+        	 int n =0;
+        	for(Track t1 : this.model.getVertici()) {
+        			if (s.contains(t1) && flag==0) {
+        				 n=this.model.getNPlaylistFromTrack(t1.getTrackId());
+        			}
+
+        	}
+        	this.model.getVertici();
+    	txtResult.appendText("Componente connessa con "+ s.size()+" vertici, inseriti in "+n+" playlist.\n\n");
+    	}
 
     }
 
@@ -70,6 +152,12 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
+    	List<String> generi = new LinkedList<>();
+    	generi=this.model.getNameGenre();
+    	Collections.sort(generi);
+    	
+    	cmbGenere.getItems().addAll(generi);
     }
 
 }

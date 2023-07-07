@@ -2,15 +2,17 @@ package it.polito.tdp.itunes.model;
 
 public class Track {
 	private Integer trackId;
+	private Integer genreId;
 	private String name;
 	private String composer;
 	private int milliseconds;
 	private int bytes;
 	private double unitPrice;
 	
-	public Track(Integer trackId, String name, String composer, int milliseconds, int bytes, double unitPrice) {
+	public Track(Integer trackId, Integer genreId , String name, String composer, int milliseconds, int bytes, double unitPrice) {
 		super();
 		this.trackId = trackId;
+		this.genreId = genreId;
 		this.name = name;
 		this.composer = composer;
 		this.milliseconds = milliseconds;
@@ -53,6 +55,16 @@ public class Track {
 	}
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+	
+	
+
+	public Integer getGenreId() {
+		return genreId;
+	}
+
+	public void setGenreId(Integer genreId) {
+		this.genreId = genreId;
 	}
 
 	@Override
