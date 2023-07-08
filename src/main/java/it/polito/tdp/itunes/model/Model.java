@@ -113,5 +113,30 @@ public List<Set<Track>> getComponente() {
 public Integer getNPlaylistFromTrack(Integer trackId){
 	return this.dao.getNPlaylistFromTrack(trackId);
 }
+
+public boolean controllaIlMin(String genere,Double min) {
+	
+	int m=0;
+	
+int genereId=0;
+	
+	for(Genre g : this.genreList) {
+		if(g.getName().equals(genere)) {
+			genereId=g.getGenreId();
+		}
+	}
+	
+	for(Track t : trackList) {
+		if(t.getGenreId()==genereId) {
+			if(t.getMilliseconds()<m) {
+				m=t.getMilliseconds();
+			}
+		}
+	}
+	
+	
+	return min>m;
+}
+
 	
 }

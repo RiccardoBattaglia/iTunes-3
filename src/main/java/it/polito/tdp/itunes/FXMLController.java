@@ -74,6 +74,8 @@ public class FXMLController {
     		return ;
     	}
     	
+    	
+    	
     	double durataMin = 0.0 ;
 
     	try {
@@ -82,6 +84,8 @@ public class FXMLController {
     		txtResult.setText("Inserire un numero come durata minima.\n");
     		return ;
     	}
+
+    	
     	
     	
         String max = txtMax.getText() ;
@@ -107,6 +111,11 @@ public class FXMLController {
     	
     	double dmin=durataMin*1000;
     	double dmax=durataMax*1000;
+    	
+//    	if(model.controllaIlMin(genere, durataMin*1000)) {
+//    		txtResult.setText("Inserire una durata minima valida.\n");
+//    		return ;
+//    	}
     	
     	
 //    	creazione grafo
